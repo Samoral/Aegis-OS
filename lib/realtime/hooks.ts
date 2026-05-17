@@ -63,11 +63,13 @@ export function useIncidentsByRegion(region: string) {
 // Hook to subscribe to specific alert types
 export function useAlertSubscription(options: SubscriptionOptions) {
   const { subscribe, unsubscribe } = useRealtime();
+  const optionsString = JSON.stringify(options);
   
   useEffect(() => {
     subscribe(options);
     return () => unsubscribe();
-  }, [JSON.stringify(options)]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [optionsString]);
 }
 
 // Hook to get realtime statistics
@@ -152,6 +154,7 @@ export function useAutoConnect(enabled: boolean = true) {
         disconnect();
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enabled]);
 
   return connected;
@@ -238,6 +241,7 @@ export function useDebouncedRealtime<T>(
   delay: number = 500
 ): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(selector());
+  const selectorResult = selector();
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -245,7 +249,8 @@ export function useDebouncedRealtime<T>(
     }, delay);
 
     return () => clearTimeout(handler);
-  }, [selector(), delay]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectorResult, delay]);
 
   return debouncedValue;
 }

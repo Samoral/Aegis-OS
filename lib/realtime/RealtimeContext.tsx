@@ -102,7 +102,8 @@ export function RealtimeProvider({
         simulatorRef.current.disconnect();
       }
     };
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoConnect, config]);
 
   // Handle new alert
   const handleAlert = useCallback((alert: LiveAlert) => {

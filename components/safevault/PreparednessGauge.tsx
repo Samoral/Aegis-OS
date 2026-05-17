@@ -78,8 +78,30 @@ export default function PreparednessGauge({ score, className = '' }: Preparednes
           />
           <defs>
             <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" className={`${getLevelGradient(score.level).split(' ')[0].replace('from-', 'stop-')}`} />
-              <stop offset="100%" className={`${getLevelGradient(score.level).split(' ')[1].replace('to-', 'stop-')}`} />
+              {score.level === 'excellent' && (
+                <>
+                  <stop offset="0%" stopColor="#22c55e" />
+                  <stop offset="100%" stopColor="#10b981" />
+                </>
+              )}
+              {score.level === 'good' && (
+                <>
+                  <stop offset="0%" stopColor="#06b6d4" />
+                  <stop offset="100%" stopColor="#3b82f6" />
+                </>
+              )}
+              {score.level === 'moderate' && (
+                <>
+                  <stop offset="0%" stopColor="#eab308" />
+                  <stop offset="100%" stopColor="#f59e0b" />
+                </>
+              )}
+              {(score.level === 'low' || score.level === 'critical') && (
+                <>
+                  <stop offset="0%" stopColor="#f97316" />
+                  <stop offset="100%" stopColor="#ef4444" />
+                </>
+              )}
             </linearGradient>
           </defs>
         </svg>

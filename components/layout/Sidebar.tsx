@@ -82,8 +82,10 @@ export default function Sidebar() {
         }}
         transition={{ type: 'spring', damping: 20 }}
         className={cn(
-          'fixed lg:sticky top-0 left-0 h-screen w-64 glass-strong border-r border-white/10 z-40',
-          'lg:translate-x-0 flex flex-col'
+          'fixed lg:sticky top-0 left-0 h-screen w-64 glass-strong border-r border-white/10',
+          'flex flex-col',
+          'z-[var(--z-sidebar)] lg:z-[var(--z-content)]',
+          'lg:!transform-none' // Force sidebar to be visible on desktop
         )}
       >
         {/* Logo */}

@@ -1,0 +1,49 @@
+{
+  "name": "AEGIS OS - Emergency Response System",
+  "short_name": "AEGIS OS",
+  "description": "Advanced Emergency Global Intelligence System for coordinating rapid response and resource management",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050814",
+  "theme_color": "#0ea5e9",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["emergency", "safety", "utilities"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "SafeVault",
+      "short_name": "SafeVault",
+      "description": "Emergency preparedness dashboard",
+      "url": "/safevault",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Family Safety",
+      "short_name": "Family",
+      "description": "Family safety monitoring",
+      "url": "/family",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "AI Intelligence",
+      "short_name": "Intelligence",
+      "description": "AI-powered crisis intelligence",
+      "url": "/intelligence",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+    }
+  ]
+}

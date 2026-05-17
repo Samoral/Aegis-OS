@@ -6,7 +6,7 @@ import Badge from '@/components/ui/Badge';
 
 export default function Navbar() {
   return (
-    <header className="sticky top-0 z-30 glass-strong border-b border-white/10">
+    <header className="sticky top-0 glass-strong border-b border-white/10 z-[var(--z-navbar)]">
       <div className="flex items-center justify-between px-6 py-4">
         {/* Search Bar */}
         <div className="flex-1 max-w-xl">

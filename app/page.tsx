@@ -1,45 +1,31 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { ArrowRight, Play, Shield, Brain, Heart, Bell, Users, Zap, Globe, Satellite, Activity, AlertTriangle, TrendingUp, Radio } from 'lucide-react';
 import Link from 'next/link';
+import AnimatedGlobe from '@/components/landing/AnimatedGlobe';
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen w-full overflow-hidden relative">
+    <div className="min-h-screen w-full overflow-hidden relative bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
       {/* Animated Grid Background */}
-      <div className="fixed inset-0 grid-background opacity-30" />
+      <div className="fixed inset-0 grid-background opacity-20" />
       
       {/* Gradient Orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.15, 0.25, 0.15],
-          }}
-          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-cyan-500 rounded-full blur-[120px]"
-        />
-        <motion.div
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.1, 0.2, 0.1],
-          }}
-          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-blue-500 rounded-full blur-[120px]"
-        />
+        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-cyan-500 rounded-full blur-[120px] opacity-20 animate-pulse" />
+        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-blue-500 rounded-full blur-[120px] opacity-15 animate-pulse" style={{ animationDelay: '1s' }} />
       </div>
 
       {/* Top Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 glass-strong border-b border-white/10">
+      <nav className="fixed top-0 left-0 right-0 glass-strong border-b border-white/10 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center holographic-glow">
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center shadow-lg shadow-cyan-500/50">
                 <Shield className="w-6 h-6 text-white" />
               </div>
-              <span className="text-2xl font-bold neon-cyan">AEGIS OS</span>
+              <span className="text-2xl font-bold text-cyan-400">AEGIS OS</span>
             </Link>
 
             {/* Navigation Links */}
@@ -48,8 +34,7 @@ export default function LandingPage() {
               <Link href="/safevault" className="text-gray-300 hover:text-cyan-400 transition-colors font-medium">Platform</Link>
               <Link href="/intelligence" className="text-gray-300 hover:text-cyan-400 transition-colors font-medium">Solutions</Link>
               <Link href="/intelligence" className="text-gray-300 hover:text-cyan-400 transition-colors font-medium">AI Intelligence</Link>
-              <Link href="/resources" className="text-gray-300 hover:text-cyan-400 transition-colors font-medium">Resources</Link>
-              <Link href="/about" className="text-gray-300 hover:text-cyan-400 transition-colors font-medium">About Us</Link>
+              <Link href="/family" className="text-gray-300 hover:text-cyan-400 transition-colors font-medium">Family Safety</Link>
             </div>
 
             {/* CTA Buttons */}
@@ -57,13 +42,11 @@ export default function LandingPage() {
               <button className="hidden md:block px-6 py-2 text-white hover:text-cyan-400 transition-colors font-medium">
                 Login
               </button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-6 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold shadow-lg shadow-cyan-500/50 holographic-glow"
-              >
-                Get Started
-              </motion.button>
+              <Link href="/safevault">
+                <button className="px-6 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold shadow-lg shadow-cyan-500/50 hover:shadow-cyan-500/70 transition-all">
+                  Get Started
+                </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -71,82 +54,48 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center pt-20 px-6">
-        {/* Hero Content */}
         <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left Side - Text Content */}
           <div className="space-y-8">
             {/* Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-strong border border-cyan-500/30 holographic-border"
-            >
-              <Zap className="w-4 h-4 text-cyan-400 animate-pulse-glow" />
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-strong border border-cyan-500/30">
+              <Zap className="w-4 h-4 text-cyan-400 animate-pulse" />
               <span className="text-sm font-semibold text-cyan-400 uppercase tracking-wider">
                 AI-POWERED DISASTER RESILIENCE PLATFORM
               </span>
-            </motion.div>
+            </div>
 
             {/* Main Headline */}
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight"
-            >
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
               <span className="text-white">PREDICT. PROTECT.</span>
               <br />
               <span className="text-white">RESPOND.</span>
               <br />
-              <span className="neon-cyan animate-pulse-glow">SAVE LIVES.</span>
-            </motion.h1>
+              <span className="text-cyan-400 animate-pulse">SAVE LIVES.</span>
+            </h1>
 
             {/* Supporting Text */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-xl text-gray-300 leading-relaxed max-w-2xl"
-            >
+            <p className="text-xl text-gray-300 leading-relaxed max-w-2xl">
               AEGIS OS is an AI-powered operating system for disaster intelligence, real-time alerts,
               family safety, and emergency coordination. Built to protect humanity when it matters most.
-            </motion.p>
+            </p>
 
             {/* CTA Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex flex-col sm:flex-row gap-4"
-            >
+            <div className="flex flex-col sm:flex-row gap-4">
               <Link href="/safevault">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-8 py-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-lg font-semibold shadow-2xl shadow-cyan-500/50 inline-flex items-center gap-2 holographic-glow"
-                >
+                <button className="px-8 py-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-lg font-semibold shadow-2xl shadow-cyan-500/50 inline-flex items-center gap-2 hover:shadow-cyan-500/70 transition-all">
                   Explore Dashboard
                   <ArrowRight className="w-5 h-5" />
-                </motion.button>
+                </button>
               </Link>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 rounded-xl glass-strong text-white text-lg font-semibold inline-flex items-center gap-2 border border-white/10 hover:border-cyan-500/50 transition-all"
-              >
+              <button className="px-8 py-4 rounded-xl glass-strong text-white text-lg font-semibold inline-flex items-center gap-2 border border-white/10 hover:border-cyan-500/50 transition-all">
                 <Play className="w-5 h-5" />
                 Watch Demo
-              </motion.button>
-            </motion.div>
+              </button>
+            </div>
 
             {/* Trusted By */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="pt-8 border-t border-white/10"
-            >
+            <div className="pt-8 border-t border-white/10">
               <p className="text-sm text-gray-400 mb-4 uppercase tracking-wider">Trusted by Leading Organizations</p>
               <div className="flex flex-wrap items-center gap-8">
                 <div className="text-2xl font-bold text-gray-500 hover:text-cyan-400 transition-colors">UNDRR</div>
@@ -155,100 +104,16 @@ export default function LandingPage() {
                 <div className="text-2xl font-bold text-gray-500 hover:text-cyan-400 transition-colors">UNDP</div>
                 <div className="text-2xl font-bold text-gray-500 hover:text-cyan-400 transition-colors">NASA</div>
               </div>
-            </motion.div>
+            </div>
           </div>
 
-          {/* Right Side - 3D Earth Hologram with Emergency Cards */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.3 }}
-            className="relative h-[700px] flex items-center justify-center"
-          >
-            {/* Central Globe Container */}
-            <div className="relative w-full h-full flex items-center justify-center">
-              {/* Rotating Rings */}
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
-                className="absolute w-[500px] h-[500px] rounded-full border-2 border-cyan-500/20"
-              />
-              <motion.div
-                animate={{ rotate: -360 }}
-                transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
-                className="absolute w-[550px] h-[550px] rounded-full border border-blue-500/10"
-              />
-              
-              {/* Globe Core with Holographic Effect */}
-              <motion.div
-                animate={{
-                  scale: [1, 1.05, 1],
-                }}
-                transition={{ duration: 4, repeat: Infinity }}
-                className="relative w-96 h-96 rounded-full bg-gradient-to-br from-cyan-500/20 via-blue-500/20 to-purple-500/20 backdrop-blur-xl border border-cyan-500/30 shadow-2xl holographic-glow flex items-center justify-center"
-              >
-                <Globe className="w-40 h-40 text-cyan-400 animate-pulse-glow" />
-                
-                {/* Radar Rings */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <motion.div
-                    animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
-                    transition={{ duration: 3, repeat: Infinity }}
-                    className="absolute w-full h-full rounded-full border-2 border-cyan-400/50"
-                  />
-                  <motion.div
-                    animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
-                    transition={{ duration: 3, repeat: Infinity, delay: 1 }}
-                    className="absolute w-full h-full rounded-full border-2 border-blue-400/50"
-                  />
-                </div>
-
-                {/* Emergency Hotspots */}
-                <motion.div
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  className="absolute top-1/4 right-1/4 w-4 h-4 bg-red-500 rounded-full shadow-lg shadow-red-500/50 alert-pulse"
-                />
-                <motion.div
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
-                  className="absolute bottom-1/3 left-1/4 w-4 h-4 bg-red-500 rounded-full shadow-lg shadow-red-500/50 alert-pulse"
-                />
-                <motion.div
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 2, repeat: Infinity, delay: 1 }}
-                  className="absolute top-1/2 left-1/3 w-4 h-4 bg-orange-500 rounded-full shadow-lg shadow-orange-500/50 alert-pulse"
-                />
-              </motion.div>
-
-              {/* Orbiting Satellites */}
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-                className="absolute w-[500px] h-[500px]"
-              >
-                <Satellite className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-8 text-cyan-400 drop-shadow-[0_0_10px_rgba(6,182,212,0.8)]" />
-              </motion.div>
-              <motion.div
-                animate={{ rotate: -360 }}
-                transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
-                className="absolute w-[500px] h-[500px]"
-              >
-                <Satellite className="absolute bottom-0 right-1/2 translate-x-1/2 w-8 h-8 text-blue-400 drop-shadow-[0_0_10px_rgba(59,130,246,0.8)]" />
-              </motion.div>
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 18, repeat: Infinity, ease: 'linear' }}
-                className="absolute w-[500px] h-[500px]"
-              >
-                <Satellite className="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-8 text-purple-400 drop-shadow-[0_0_10px_rgba(168,85,247,0.8)]" />
-              </motion.div>
-            </div>
+          {/* Right Side - Interactive Holographic Earth */}
+          <div className="relative h-[700px] flex items-center justify-center">
+            <AnimatedGlobe />
 
             {/* Floating Emergency Cards */}
             <EmergencyCard
               position="top-0 left-0"
-              delay={0.5}
               icon={<AlertTriangle className="w-5 h-5" />}
               title="CRITICAL ALERT"
               subtitle="Cyclone Approaching"
@@ -258,7 +123,6 @@ export default function LandingPage() {
             />
             <EmergencyCard
               position="top-20 right-0"
-              delay={0.7}
               icon={<Brain className="w-5 h-5" />}
               title="AI RISK PREDICTION"
               subtitle="Risk Level: EXTREME"
@@ -268,7 +132,6 @@ export default function LandingPage() {
             />
             <EmergencyCard
               position="bottom-0 left-0"
-              delay={0.9}
               icon={<Activity className="w-5 h-5" />}
               title="LIVE INCIDENTS"
               subtitle="247 Active"
@@ -276,78 +139,61 @@ export default function LandingPage() {
               status="MONITORING"
               color="cyan"
             />
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* Feature Cards Section */}
       <section className="relative py-32 px-6">
         <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-20"
-          >
-            <motion.div
-              initial={{ scale: 0 }}
-              whileInView={{ scale: 1 }}
-              viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-strong border border-cyan-500/30 mb-6"
-            >
+          <div className="text-center mb-20">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-strong border border-cyan-500/30 mb-6">
               <Zap className="w-4 h-4 text-cyan-400" />
               <span className="text-sm font-semibold text-cyan-400 uppercase tracking-wider">Advanced Capabilities</span>
-            </motion.div>
+            </div>
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
               Comprehensive Protection Platform
             </h2>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
               Advanced AI systems working together to predict, prevent, and respond to emergencies
             </p>
-          </motion.div>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <FeatureCard
               icon={<Brain className="w-8 h-8" />}
               title="AI Crisis Intelligence"
               description="Real-time disaster prediction and risk assessment powered by advanced machine learning"
-              delay={0.1}
               color="cyan"
             />
             <FeatureCard
               icon={<Heart className="w-8 h-8" />}
               title="Family Safety"
               description="Track and protect your loved ones with location monitoring and emergency alerts"
-              delay={0.2}
               color="pink"
             />
             <FeatureCard
               icon={<Shield className="w-8 h-8" />}
               title="Elderly SOS"
               description="24/7 monitoring with fall detection and instant emergency response for seniors"
-              delay={0.3}
               color="green"
             />
             <FeatureCard
               icon={<Bell className="w-8 h-8" />}
               title="Real-time Alerts"
               description="Instant notifications for disasters, emergencies, and critical situations"
-              delay={0.4}
               color="amber"
             />
             <FeatureCard
               icon={<Users className="w-8 h-8" />}
               title="Resource Coordination"
               description="Efficient allocation and tracking of emergency supplies and response teams"
-              delay={0.5}
               color="blue"
             />
             <FeatureCard
               icon={<Zap className="w-8 h-8" />}
               title="AI Emergency Assistant"
               description="Intelligent guidance and recommendations during crisis situations"
-              delay={0.6}
               color="purple"
             />
           </div>
@@ -357,13 +203,7 @@ export default function LandingPage() {
       {/* Global Impact Section */}
       <section className="relative py-32 px-6">
         <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="glass-strong rounded-3xl p-12 border border-cyan-500/30 holographic-border relative overflow-hidden"
-          >
+          <div className="glass-strong rounded-3xl p-12 border border-cyan-500/30 relative overflow-hidden">
             {/* Background Effects */}
             <div className="absolute inset-0 opacity-10">
               <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500 rounded-full blur-[100px]" />
@@ -385,20 +225,14 @@ export default function LandingPage() {
                 <ImpactStat number="24/7" label="Monitoring & Support" icon={<Radio className="w-6 h-6" />} />
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* Final CTA */}
       <section className="relative py-32 px-6">
         <div className="max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="glass-strong rounded-3xl p-12 text-center border border-cyan-500/30 holographic-border relative overflow-hidden"
-          >
+          <div className="glass-strong rounded-3xl p-12 text-center border border-cyan-500/30 relative overflow-hidden">
             {/* Background Glow */}
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 blur-xl" />
             
@@ -410,25 +244,30 @@ export default function LandingPage() {
                 Join thousands of organizations using AEGIS OS to save lives worldwide
               </p>
               <Link href="/safevault">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-10 py-5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-xl font-semibold shadow-2xl shadow-cyan-500/50 inline-flex items-center gap-3 holographic-glow"
-                >
+                <button className="px-10 py-5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-xl font-semibold shadow-2xl shadow-cyan-500/50 inline-flex items-center gap-3 hover:shadow-cyan-500/70 transition-all">
                   Launch Mission Control
                   <ArrowRight className="w-6 h-6" />
-                </motion.button>
+                </button>
               </Link>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="relative py-12 px-6 border-t border-white/10">
+        <div className="max-w-7xl mx-auto text-center">
+          <p className="text-gray-400">
+            © 2026 AEGIS OS. Protecting humanity through advanced AI and real-time intelligence.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
 
 // Emergency Card Component
-function EmergencyCard({ position, delay, icon, title, subtitle, detail, status, color }: any) {
+function EmergencyCard({ position, icon, title, subtitle, detail, status, color }: any) {
   const colorClasses = {
     red: {
       border: 'border-red-500/50',
@@ -453,36 +292,21 @@ function EmergencyCard({ position, delay, icon, title, subtitle, detail, status,
   const colors = colorClasses[color as keyof typeof colorClasses];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.5, delay }}
-      whileHover={{ scale: 1.05, y: -5 }}
-      className={`absolute ${position} glass-strong rounded-xl p-4 border-2 ${colors.border} ${colors.bg} min-w-[220px] shadow-xl ${colors.glow} backdrop-blur-xl`}
-    >
+    <div className={`absolute ${position} glass-strong rounded-xl p-4 border-2 ${colors.border} ${colors.bg} min-w-[220px] shadow-xl ${colors.glow} backdrop-blur-xl hover:scale-105 transition-transform`}>
       <div className="flex items-center gap-2 mb-3">
         <div className={colors.text}>{icon}</div>
         <span className={`text-xs font-bold ${colors.text} uppercase tracking-wider`}>{status}</span>
-        <motion.div
-          animate={{ opacity: [0.5, 1, 0.5] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className={`ml-auto w-2 h-2 rounded-full ${colors.text.replace('text-', 'bg-')}`}
-        />
+        <div className={`ml-auto w-2 h-2 rounded-full ${colors.text.replace('text-', 'bg-')} animate-pulse`} />
       </div>
       <h4 className="text-white font-bold mb-1 text-sm">{title}</h4>
       <p className="text-gray-300 text-xs mb-1">{subtitle}</p>
       <p className={`text-xs ${colors.text} font-semibold`}>{detail}</p>
-      <motion.div
-        animate={{ scaleX: [0, 1, 0] }}
-        transition={{ duration: 3, repeat: Infinity }}
-        className={`mt-3 h-1 ${colors.text.replace('text-', 'bg-')} rounded-full origin-left`}
-      />
-    </motion.div>
+    </div>
   );
 }
 
 // Feature Card Component
-function FeatureCard({ icon, title, description, delay, color }: any) {
+function FeatureCard({ icon, title, description, color }: any) {
   const colorMap: any = {
     cyan: 'from-cyan-500 to-cyan-600',
     pink: 'from-pink-500 to-pink-600',
@@ -493,14 +317,7 @@ function FeatureCard({ icon, title, description, delay, color }: any) {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay }}
-      whileHover={{ y: -8, scale: 1.02 }}
-      className="glass-strong rounded-2xl p-8 border border-white/10 hover:border-cyan-500/50 transition-all group relative overflow-hidden"
-    >
+    <div className="glass-strong rounded-2xl p-8 border border-white/10 hover:border-cyan-500/50 transition-all group relative overflow-hidden hover:-translate-y-2">
       {/* Hover Glow Effect */}
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-blue-500/0 group-hover:from-cyan-500/10 group-hover:to-blue-500/10 transition-all duration-300" />
       
@@ -511,29 +328,22 @@ function FeatureCard({ icon, title, description, delay, color }: any) {
         <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-cyan-400 transition-colors">{title}</h3>
         <p className="text-gray-400 leading-relaxed">{description}</p>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
 // Impact Stat Component
 function ImpactStat({ number, label, icon }: any) {
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.8 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
-      whileHover={{ scale: 1.05 }}
-      className="text-center group"
-    >
+    <div className="text-center group hover:scale-105 transition-transform">
       <div className="flex justify-center mb-3">
         <div className="text-cyan-400 group-hover:scale-110 transition-transform">
           {icon}
         </div>
       </div>
-      <div className="text-4xl md:text-5xl font-bold neon-cyan mb-2 group-hover:text-shadow-glow transition-all">{number}</div>
+      <div className="text-4xl md:text-5xl font-bold text-cyan-400 mb-2">{number}</div>
       <div className="text-sm text-gray-400 uppercase tracking-wider">{label}</div>
-    </motion.div>
+    </div>
   );
 }
 
