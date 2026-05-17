@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import * as THREE from 'three';
+import { RotateCcw, ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
 
 interface NetworkNode {
   position: THREE.Vector3;
@@ -23,6 +24,39 @@ export default function AnimatedGlobe() {
   const globeRef = useRef<THREE.Group | null>(null);
   const networkNodesRef = useRef<NetworkNode[]>([]);
   const hazardHotspotsRef = useRef<HazardHotspot[]>([]);
+  
+  // Interactive controls state
+  const [isInteracting, setIsInteracting] = useState(false);
+  const [autoRotate, setAutoRotate] = useState(true);
+  const isDraggingRef = useRef(false);
+  const previousMousePositionRef = useRef({ x: 0, y: 0 });
+  const rotationVelocityRef = useRef({ x: 0, y: 0 });
+
+  // Reset camera position
+  const resetCamera = () => {
+    if (cameraRef.current) {
+      cameraRef.current.position.set(0, 0, 5);
+      cameraRef.current.lookAt(0, 0, 0);
+    }
+    if (globeRef.current) {
+      globeRef.current.rotation.set(0, 0, 0);
+      rotationVelocityRef.current = { x: 0, y: 0 };
+    }
+    setAutoRotate(true);
+  };
+
+  // Zoom controls
+  const zoomIn = () => {
+    if (cameraRef.current && cameraRef.current.position.z > 2) {
+      cameraRef.current.position.z -= 0.5;
+    }
+  };
+
+  const zoomOut = () => {
+    if (cameraRef.current && cameraRef.current.position.z < 10) {
+      cameraRef.current.position.z += 0.5;
+    }
+  };
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -278,14 +312,124 @@ export default function AnimatedGlobe() {
     pointLight.position.set(5, 5, 5);
     scene.add(pointLight);
 
+    // Mouse interaction handlers
+    const handleMouseDown = (event: MouseEvent) => {
+      isDraggingRef.current = true;
+      setIsInteracting(true);
+      setAutoRotate(false);
+      previousMousePositionRef.current = {
+        x: event.clientX,
+        y: event.clientY,
+      };
+    };
+
+    const handleMouseMove = (event: MouseEvent) => {
+      if (!isDraggingRef.current || !globe) return;
+
+      const deltaX = event.clientX - previousMousePositionRef.current.x;
+      const deltaY = event.clientY - previousMousePositionRef.current.y;
+
+      globe.rotation.y += deltaX * 0.005;
+      globe.rotation.x += deltaY * 0.005;
+
+      // Clamp X rotation to prevent flipping
+      globe.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, globe.rotation.x));
+
+      rotationVelocityRef.current = {
+        x: deltaY * 0.005,
+        y: deltaX * 0.005,
+      };
+
+      previousMousePositionRef.current = {
+        x: event.clientX,
+        y: event.clientY,
+      };
+    };
+
+    const handleMouseUp = () => {
+      isDraggingRef.current = false;
+      setIsInteracting(false);
+    };
+
+    const handleWheel = (event: WheelEvent) => {
+      event.preventDefault();
+      if (camera) {
+        const zoomSpeed = 0.001;
+        camera.position.z += event.deltaY * zoomSpeed;
+        camera.position.z = Math.max(2, Math.min(10, camera.position.z));
+      }
+    };
+
+    // Touch handlers for mobile
+    const handleTouchStart = (event: TouchEvent) => {
+      if (event.touches.length === 1) {
+        isDraggingRef.current = true;
+        setIsInteracting(true);
+        setAutoRotate(false);
+        previousMousePositionRef.current = {
+          x: event.touches[0].clientX,
+          y: event.touches[0].clientY,
+        };
+      }
+    };
+
+    const handleTouchMove = (event: TouchEvent) => {
+      if (!isDraggingRef.current || !globe || event.touches.length !== 1) return;
+
+      const deltaX = event.touches[0].clientX - previousMousePositionRef.current.x;
+      const deltaY = event.touches[0].clientY - previousMousePositionRef.current.y;
+
+      globe.rotation.y += deltaX * 0.005;
+      globe.rotation.x += deltaY * 0.005;
+
+      globe.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, globe.rotation.x));
+
+      previousMousePositionRef.current = {
+        x: event.touches[0].clientX,
+        y: event.touches[0].clientY,
+      };
+    };
+
+    const handleTouchEnd = () => {
+      isDraggingRef.current = false;
+      setIsInteracting(false);
+    };
+
+    // Add event listeners
+    const canvas = renderer.domElement;
+    canvas.addEventListener('mousedown', handleMouseDown);
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+    canvas.addEventListener('wheel', handleWheel, { passive: false });
+    canvas.addEventListener('touchstart', handleTouchStart);
+    canvas.addEventListener('touchmove', handleTouchMove);
+    canvas.addEventListener('touchend', handleTouchEnd);
+
     // Animation
     let animationFrameId: number;
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
 
-      // Rotate globe
+      // Rotate globe with auto-rotate or apply velocity
       if (globe) {
-        globe.rotation.y += 0.002;
+        if (autoRotate && !isDraggingRef.current) {
+          globe.rotation.y += 0.002;
+        } else if (!isDraggingRef.current) {
+          // Apply inertia
+          globe.rotation.y += rotationVelocityRef.current.y;
+          globe.rotation.x += rotationVelocityRef.current.x;
+          
+          // Damping
+          rotationVelocityRef.current.x *= 0.95;
+          rotationVelocityRef.current.y *= 0.95;
+          
+          // Stop if velocity is very small
+          if (Math.abs(rotationVelocityRef.current.x) < 0.0001 &&
+              Math.abs(rotationVelocityRef.current.y) < 0.0001) {
+            rotationVelocityRef.current = { x: 0, y: 0 };
+            setAutoRotate(true);
+          }
+        }
       }
 
       // Animate satellites
@@ -349,6 +493,13 @@ export default function AnimatedGlobe() {
     // Cleanup
     return () => {
       window.removeEventListener('resize', handleResize);
+      canvas.removeEventListener('mousedown', handleMouseDown);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+      canvas.removeEventListener('wheel', handleWheel);
+      canvas.removeEventListener('touchstart', handleTouchStart);
+      canvas.removeEventListener('touchmove', handleTouchMove);
+      canvas.removeEventListener('touchend', handleTouchEnd);
       cancelAnimationFrame(animationFrameId);
       
       if (containerRef.current && renderer.domElement) {
@@ -369,22 +520,70 @@ export default function AnimatedGlobe() {
         }
       });
     };
-  }, []);
+  }, [autoRotate]);
 
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 1, ease: 'easeOut' }}
-      className="relative w-full h-full flex items-center justify-center"
+      className="relative w-full h-full flex items-center justify-center group"
     >
       <div
         ref={containerRef}
-        className="w-full h-full min-h-[400px] md:min-h-[500px]"
-        style={{ 
+        className={`w-full h-full min-h-[400px] md:min-h-[500px] transition-all duration-300 ${
+          isInteracting ? 'cursor-grabbing' : 'cursor-grab'
+        }`}
+        style={{
           filter: 'drop-shadow(0 0 60px rgba(59, 130, 246, 0.4))',
         }}
       />
+      
+      {/* Interactive Controls */}
+      <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={zoomIn}
+          className="glass-strong p-3 rounded-lg hover:bg-cyan-500/20 transition-colors"
+          title="Zoom In"
+        >
+          <ZoomIn className="w-5 h-5 text-cyan-400" />
+        </motion.button>
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={zoomOut}
+          className="glass-strong p-3 rounded-lg hover:bg-cyan-500/20 transition-colors"
+          title="Zoom Out"
+        >
+          <ZoomOut className="w-5 h-5 text-cyan-400" />
+        </motion.button>
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={resetCamera}
+          className="glass-strong p-3 rounded-lg hover:bg-cyan-500/20 transition-colors"
+          title="Reset View"
+        >
+          <RotateCcw className="w-5 h-5 text-cyan-400" />
+        </motion.button>
+      </div>
+
+      {/* Interaction Hint */}
+      {!isInteracting && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2 }}
+          className="absolute top-4 left-4 glass-strong px-4 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        >
+          <p className="text-xs text-cyan-400 flex items-center gap-2">
+            <Maximize2 className="w-4 h-4" />
+            <span>Drag to rotate • Scroll to zoom</span>
+          </p>
+        </motion.div>
+      )}
       
       {/* Info overlay */}
       <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center text-xs text-primary-300/60 pointer-events-none">
@@ -398,8 +597,23 @@ export default function AnimatedGlobe() {
             <span>Hazard Zones</span>
           </div>
         </div>
-        <span>Live Global Monitoring</span>
+        <span className="hidden sm:inline">Live Global Monitoring</span>
       </div>
+
+      {/* Auto-rotate indicator */}
+      {autoRotate && !isInteracting && (
+        <div className="absolute bottom-4 right-4 glass-subtle px-3 py-1.5 rounded-full pointer-events-none">
+          <p className="text-xs text-cyan-400/60 flex items-center gap-2">
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+            >
+              <RotateCcw className="w-3 h-3" />
+            </motion.div>
+            <span>Auto-rotating</span>
+          </p>
+        </div>
+      )}
     </motion.div>
   );
 }

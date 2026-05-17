@@ -2,9 +2,26 @@
 
 import { ArrowRight, Play, Shield, Brain, Heart, Bell, Users, Zap, Globe, Satellite, Activity, AlertTriangle, TrendingUp, Radio } from 'lucide-react';
 import Link from 'next/link';
-import AnimatedGlobe from '@/components/landing/AnimatedGlobe';
+import dynamic from 'next/dynamic';
+import { useState, useEffect } from 'react';
+
+// Dynamically import AnimatedGlobe with no SSR to prevent hydration errors
+const AnimatedGlobe = dynamic(() => import('@/components/landing/AnimatedGlobe'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full min-h-[400px] md:min-h-[500px] flex items-center justify-center">
+      <div className="w-16 h-16 border-4 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin" />
+    </div>
+  ),
+});
 
 export default function LandingPage() {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   return (
     <div className="min-h-screen w-full overflow-hidden relative bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
       {/* Animated Grid Background */}
@@ -109,7 +126,7 @@ export default function LandingPage() {
 
           {/* Right Side - Interactive Holographic Earth */}
           <div className="relative h-[700px] flex items-center justify-center">
-            <AnimatedGlobe />
+            {isMounted && <AnimatedGlobe />}
 
             {/* Floating Emergency Cards */}
             <EmergencyCard
