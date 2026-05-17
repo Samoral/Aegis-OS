@@ -457,7 +457,11 @@ export default function AnimatedGlobe() {
         if (child.userData.isHotspot) {
           const time = Date.now() * 0.003;
           const pulse = Math.sin(time + child.userData.pulsePhase) * 0.3 + 0.7;
-          (child as THREE.Mesh).material.opacity = pulse;
+          const mesh = child as THREE.Mesh;
+          const material = mesh.material;
+          if (!Array.isArray(material)) {
+            (material as THREE.MeshBasicMaterial).opacity = pulse;
+          }
           child.scale.setScalar(0.8 + pulse * 0.4);
         }
 
@@ -465,7 +469,11 @@ export default function AnimatedGlobe() {
         if (child.userData.isHotspotRing) {
           const time = Date.now() * 0.003;
           const pulse = Math.sin(time + child.userData.pulsePhase - child.userData.ringIndex * 0.5) * 0.5 + 0.5;
-          (child as THREE.Mesh).material.opacity = (0.3 - child.userData.ringIndex * 0.1) * pulse;
+          const mesh = child as THREE.Mesh;
+          const material = mesh.material;
+          if (!Array.isArray(material)) {
+            (material as THREE.MeshBasicMaterial).opacity = (0.3 - child.userData.ringIndex * 0.1) * pulse;
+          }
           const scale = 1 + pulse * 0.5 + child.userData.ringIndex * 0.3;
           child.scale.setScalar(scale);
         }
