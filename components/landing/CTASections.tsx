@@ -176,7 +176,7 @@ export default function CTASections() {
             >
               {/* Quote */}
               <p className="text-gray-300 mb-6 leading-relaxed italic">
-                "{testimonial.quote}"
+                &ldquo;{testimonial.quote}&rdquo;
               </p>
 
               {/* Author */}
